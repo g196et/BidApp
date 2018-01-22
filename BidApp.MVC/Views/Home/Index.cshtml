@@ -1,0 +1,49 @@
+﻿@*@using BidApp.ModelEF
+@model IEnumerable<Bid>*@
+@model BidApp.MVC.Models.ListBidViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+@using (Html.BeginForm("Index", "Home", FormMethod.Get))
+{
+    @Html.ValidationSummary()
+    <label> @Html.DisplayNameFor(p => Model.status): </label>
+    @Html.DropDownList("status", Model.status as SelectList)
+
+    <label> @Html.DisplayNameFor(p => Model.minTime): </label>
+    <input type="datetime-local" name="minTime" value="01.01.0001 0:00:00" />
+
+    <label> @Html.DisplayNameFor(p => Model.maxTime): </label>
+    <input type="datetime-local" name="maxTime" value="01.01.0001 0:00:00" />
+
+    <label> @Html.DisplayNameFor(p => Model.returned): </label>
+    @Html.EditorFor(p => Model.returned, "returned")
+
+    <label> @Html.DisplayNameFor(p => Model.sortType): </label>
+    @Html.DropDownList("sortType", Model.sortType as SelectList)
+    <input type="submit" value="Фильтр" class="btn btn-default" />
+}
+@foreach (var p in @Model.bids)
+{
+    <div>
+        Название: @Html.DisplayFor(model => p.Name)<br />
+        Описание: @Html.DisplayFor(model => p.Description)<br />
+        Статус: @Html.DisplayFor(model => p.Status)<br />
+        @Html.ActionLink("Edit", "Edit", new { bidId = p.BidId }) |
+        @Html.ActionLink("Detail", "Detail", new { bidId = p.BidId }) |     
+        @using (Html.BeginForm("Delete", "Home"))
+        {
+            @Html.Hidden("bidId", p.BidId)
+            <input type="submit"
+                   class="btn btn-default btn-xs"
+                   value="Удалить" />
+        }
+        <hr />
+    </div>
+}
+

@@ -1,0 +1,72 @@
+﻿@model BidApp.ModelEF.Bid
+
+@{
+    ViewBag.Title = "Редактирование заявки";
+    ViewBag.oldStatus = Model.Status;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Редактирование заявки «@Model.Name»</h2>
+
+@using (Html.BeginForm("Edit", "Home", FormMethod.Post))
+{
+    @Html.ValidationSummary()
+    @Html.HiddenFor(x => x.BidId)
+    @Html.HiddenFor(x => x.Returned)
+    @Html.HiddenFor(x => x.Time)
+    <label>Название заявки: </label>
+    @Html.Editor("Name");
+
+    <label>Описание заявки: </label>
+    @Html.Editor("Description");
+    <p></p>
+    <label>Поменять статус с: @Html.Label("oldStatus", @Model.Status) на: </label>
+    switch(@Model.Status)
+    {
+        case "Открыта":
+            <select id="myselect" name="Status">
+                <option value="Открыта" id="defaultoption" name="Status">Не менять</option>
+                <option value="Решена" name="Status">Решена</option>
+            </select>
+            <br />
+            <label>Комментарий к изменению статуса: </label>
+            <textarea id="myInput" name="text" rows="10" cols="45" disabled ></textarea>
+            break;
+        case "Решена":
+            <select id="myselect" name="Status">
+                <option value="Решена" id="defaultoption" name="Status">Не менять</option>
+                <option value="Закрыта" name="Status">Закрыта</option>
+                <option value="Возврат" name="Status">Возврат</option>
+            </select>
+            <br />
+            <label>Комментарий к изменению статуса: </label>
+            <textarea id="myInput" name="text" rows="10" cols="45" disabled></textarea>
+            break;
+        case "Возврат":
+            <select id="myselect" name="Status">
+                <option value="Возврат" id="defaultoption" name="Status">Не менять</option>
+                <option value="Решена" name="Status">Решена</option>
+            </select>
+            <br />
+            <label>Комментарий к изменению статуса: </label>
+            <textarea id="myInput" name="text" rows="10" cols="45" disabled></textarea>
+            break;
+        case "Закрыта":
+            <p>Заявка уже закрыта!</p>
+            break;
+    }
+    <p></p>
+    <input type="submit" id="submit" value="Сохранить" />
+}
+@* Скрипт для блокировки поля комментария при отсутсвтии изменения статуса *@
+<script type="text/javascript">
+    $("#myselect").change(function () {
+        if ($("#myselect option:selected").prop('id') != "defaultoption"){
+            $("#myInput").prop("disabled", false);
+        }
+        else{
+            $("#myInput").val();
+            $("#myInput").prop("disabled", true);
+        }
+    });
+</script>

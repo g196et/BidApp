@@ -1,0 +1,21 @@
+﻿@model BidApp.ModelEF.Bid
+
+@{
+    ViewBag.Title = "Создание заявки";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Редактирование заявки «@Model.Name»</h2>
+
+
+
+@using (Html.BeginForm("Create", "Home", FormMethod.Post))
+{
+    @Html.ValidationSummary()
+    <label>Название заявки: </label>
+    @Html.Editor("Name");
+    <label>Описание заявки: </label>
+    @Html.Editor("Description");
+    <br />
+    <input type="submit" value="Отправить" />
+}
